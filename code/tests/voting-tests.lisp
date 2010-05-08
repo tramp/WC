@@ -8,6 +8,17 @@
 (WC-initialise-internals "../internals/")
 
 ;===================================================================
+;test helpers
+;====================================================================
+
+(defun create_list_of_key-pairs (num totient &optional (list-of-key-pairs nil))
+  (if (= 0 num)
+      list-of-key-pairs
+      (create_list_of_key-pairs (- num 1) totient
+				(append generate_keys totient
+					list-of-key-pairs))))
+						       
+;===================================================================
 ;test body
 ;====================================================================
 
