@@ -22,4 +22,4 @@
 
 (defun extract_vote (pvd vtd)
   (mod (private_vote_data-my_vote pvd)
-       (get_num_of_choices vtd)))
+       (length (vote_template_data-choices vtd))))

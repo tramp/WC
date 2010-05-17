@@ -4,7 +4,7 @@
 (defun get_rnd_gcd_one (totient)
 					;"chose a invertable number
 					;randomly"
-  (let ((ret (+ 2 (random (- totient 1) (make-random-state t)))))
+  (let ((ret (+ 2 (random (- totient 1)))))
     (if (= 1 (gcd ret totient))
 	ret
 	(get_rnd_gcd_one totient))))
