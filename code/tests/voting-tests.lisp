@@ -12,18 +12,34 @@
 					;primes is exhousting, and not
 					;necessary for WC it is
 					;omitted, instead "prominent"
-					;ones are used
-  (let ((p1 5)
-	(p2 7))
+					;ones are used for quick tests
+					;these are even small
+
+  (let ((p1 11)
+	(p2 13))
     (make-rclass_totient
      :r_class (* p1 p2)
      :totient (* (- p1 1) (- p2 1)))))
 
-;(trace encrypt-by-list decrypt-by-list)
-
 ;===================================================================
 ;test helpers
 ;====================================================================
+(defun list2array (lst)
+  (let ((arr (make-array 0 :fill-pointer t :adjustable t)))
+    (dolist (item lst)
+      (vector-push-extend item arr))
+    arr))
+
+(defun array2list_aux (arr lst idx)
+  (if (> 0 idx)
+      lst
+      (array2list_aux
+       arr
+       (append lst  (list (aref arr idx) ))
+       (- idx 1))))
+
+(defun array2list (arr)
+  (array2list_aux arr nil (- (array-dimension arr 0) 1)))
 
 (defun create_list_of_key-pairs (num totient &optional (list-of-key-pairs nil))
   (if (= 0 num)
@@ -54,7 +70,6 @@
       (decrypt-by-list (decrypt_vote_step vote (first pvds)) (rest pvds))
       vote))
 
-						       
 ;===================================================================
 ;test body
 ;====================================================================
@@ -85,5 +100,17 @@
 			   (private_vote_data-my_vote fpvd)
 			   pvds)
 			  pvds))))))))
+
+(5am:test crypt_decrypt_vote_chain_with_shuffle
+   (5am:is (eq T (let ((rct (generate_r_class_and_totient)))
+		  (let ((pvds (create_list_of_pvds 5 rct)))
+		    (let ((fpvd (first pvds)))
+		      (= (private_vote_data-my_vote fpvd)
+			 (decrypt-by-list
+			  (encrypt-by-list
+			   (private_vote_data-my_vote fpvd)
+			   (shuffle (list2array pvds)))
+			  pvds))))))))
+
 
 (5am:run! 'vote-suite)
