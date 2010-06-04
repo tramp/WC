@@ -2,24 +2,8 @@
 ;load stuf
 ;====================================================================
 (require 'asdf)
+(asdf:operate 'asdf:load-op 'wc)
 (asdf:operate 'asdf:load-op 'fiveam)
-(compile-file "../internals/WC-internals")
-(load "../internals/WC-internals")
-(WC-initialise-internals "../internals/")
-
-(defun generate_r_class_and_totient ()
-					;Since the search for big
-					;primes is exhousting, and not
-					;necessary for WC it is
-					;omitted, instead "prominent"
-					;ones are used for quick tests
-					;these are even small
-
-  (let ((p1 11)
-	(p2 13))
-    (make-rclass_totient
-     :r_class (* p1 p2)
-     :totient (* (- p1 1) (- p2 1)))))
 
 ;===================================================================
 ;test helpers
@@ -111,6 +95,5 @@
 			   (private_vote_data-my_vote fpvd)
 			   (shuffle (list2array pvds)))
 			  pvds))))))))
-
 
 (5am:run! 'vote-suite)
